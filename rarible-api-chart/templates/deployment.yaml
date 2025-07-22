@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rarible-api.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "rarible-api.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "rarible-api.name" . }}
+    spec:
+      containers:
+        - name: rarible-api
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 8081
+          env:
+            - name: RARIBLE_API_URL
+              value: {{ .Values.env.RARIBLE_API_URL | quote }}
+            - name: RARIBLE_API_KEY
+              value: {{ .Values.env.RARIBLE_API_KEY | quote }}
+            - name: APP_PORT
+              value: {{ .Values.env.APP_PORT | quote }} 
