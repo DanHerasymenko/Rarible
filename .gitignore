@@ -22,16 +22,7 @@ go.work
 go.work.sum
 
 # env file
-../Rarible/.env
-
-# db data
-db
-data
-postgres_data
+.env
 
 # IDE files
 .idea/
-.vscode/
-
-# Database data
-data/
