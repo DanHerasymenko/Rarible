@@ -18,6 +18,6 @@ func (s *RaribleService) GetNFTOwnerships(ctx context.Context, ownershipId strin
 	return s.client.GetNFTOwnerships(ctx, ownershipId)
 }
 
-func (s *RaribleService) GetTraitRarities(ctx context.Context, body map[string]interface{}) (*model.RarityResponse, error) {
+func (s *RaribleService) GetTraitRarities(ctx context.Context, body model.RarityRequest) (*model.RarityResponse, error) {
 	return s.client.GetTraitRaritiesPOST(ctx, body)
 }

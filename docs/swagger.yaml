@@ -104,7 +104,7 @@ definitions:
       lastUpdatedAt:
         type: string
       lazyValue:
-        type: integer
+        type: string
       originOrders:
         items:
           $ref: '#/definitions/RaribleAPI_internal_model.OriginOrder'
@@ -118,9 +118,9 @@ definitions:
       source:
         type: string
       tokenId:
-        type: integer
+        type: string
       value:
-        type: integer
+        type: string
       version:
         type: integer
     type: object
@@ -135,10 +135,21 @@ definitions:
           $ref: '#/definitions/RaribleAPI_internal_model.Royalty'
         type: array
     type: object
+  RaribleAPI_internal_model.Property:
+    properties:
+      key:
+        type: string
+      value:
+        type: string
+    type: object
   RaribleAPI_internal_model.RarityRequest:
     properties:
-      collection:
+      collectionId:
         type: string
+      properties:
+        items:
+          $ref: '#/definitions/RaribleAPI_internal_model.Property'
+        type: array
     type: object
   RaribleAPI_internal_model.RarityResponse:
     properties:
@@ -201,7 +212,7 @@ paths:
       - application/json
       description: Returns rarity for NFT traits (recommended)
       parameters:
-      - description: Rarity request
+      - description: Rarity request (collectionId, properties)
         in: body
         name: body
         required: true

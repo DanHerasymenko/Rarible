@@ -1,11 +1,13 @@
 package client
 
 import (
+	"RaribleAPI/internal/logger"
 	"RaribleAPI/internal/model"
 	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 )
@@ -24,12 +26,12 @@ func NewRaribleClient(baseURL, apiKey string) *RaribleClient {
 	}
 }
 
-// GetNFTOwnerships retrieves a list of NFT ownerships by id (GET)
 func (rc *RaribleClient) GetNFTOwnerships(ctx context.Context, ownershipId string) (*model.OwnershipResponse, error) {
 
 	endpoint := fmt.Sprintf("%s/ownerships/%s", rc.baseURL, url.PathEscape(ownershipId))
 	req, err := http.NewRequestWithContext(ctx, "GET", endpoint, nil)
 	if err != nil {
+		logger.Error(ctx, err)
 		return nil, err
 	}
 	req.Header.Set("accept", "application/json")
@@ -38,30 +40,35 @@ func (rc *RaribleClient) GetNFTOwnerships(ctx context.Context, ownershipId strin
 	}
 	resp, err := rc.client.Do(req)
 	if err != nil {
+		logger.Error(ctx, err)
 		return nil, err
 	}
 	defer resp.Body.Close()
+	bodyBytes, _ := io.ReadAll(resp.Body)
 	if resp.StatusCode != http.StatusOK {
+		logger.Error(ctx, fmt.Errorf("unexpected status: %s", resp.Status))
 		return nil, fmt.Errorf("unexpected status: %s", resp.Status)
 	}
 	var result model.OwnershipResponse
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	if err := json.Unmarshal(bodyBytes, &result); err != nil {
+		logger.Error(ctx, err)
 		return nil, err
 	}
 	return &result, nil
 }
 
-// GetTraitRaritiesPOST retrieves NFT trait rarities via POST /items/traits/rarity
-func (rc *RaribleClient) GetTraitRaritiesPOST(ctx context.Context, body map[string]interface{}) (*model.RarityResponse, error) {
+func (rc *RaribleClient) GetTraitRaritiesPOST(ctx context.Context, body model.RarityRequest) (*model.RarityResponse, error) {
 
 	endpoint := fmt.Sprintf("%s/items/traits/rarity", rc.baseURL)
 	b, err := json.Marshal(body)
 	if err != nil {
+		logger.Error(ctx, err)
 		return nil, err
 	}
 
 	req, err := http.NewRequestWithContext(ctx, "POST", endpoint, bytes.NewReader(b))
 	if err != nil {
+		logger.Error(ctx, err)
 		return nil, err
 	}
 
@@ -73,15 +80,18 @@ func (rc *RaribleClient) GetTraitRaritiesPOST(ctx context.Context, body map[stri
 
 	resp, err := rc.client.Do(req)
 	if err != nil {
+		logger.Error(ctx, err)
 		return nil, err
 	}
 	defer resp.Body.Close()
-
+	bodyBytes, _ := io.ReadAll(resp.Body)
 	if resp.StatusCode != http.StatusOK {
+		logger.Error(ctx, fmt.Errorf("unexpected status: %s", resp.Status))
 		return nil, fmt.Errorf("unexpected status: %s", resp.Status)
 	}
 	var result model.RarityResponse
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	if err := json.Unmarshal(bodyBytes, &result); err != nil {
+		logger.Error(ctx, err)
 		return nil, err
 	}
 	return &result, nil

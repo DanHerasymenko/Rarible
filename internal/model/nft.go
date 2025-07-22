@@ -6,13 +6,13 @@ type OwnershipResponse struct {
 	ItemID        string        `json:"itemId"`
 	Contract      string        `json:"contract"`
 	Collection    string        `json:"collection"`
-	TokenID       int64         `json:"tokenId"`
+	TokenID       string        `json:"tokenId"`
 	Owner         string        `json:"owner"`
-	Value         int64         `json:"value"`
+	Value         string        `json:"value"`
 	Source        string        `json:"source"`
 	CreatedAt     string        `json:"createdAt"`
 	LastUpdatedAt string        `json:"lastUpdatedAt"`
-	LazyValue     int64         `json:"lazyValue"`
+	LazyValue     string        `json:"lazyValue"`
 	Pending       []Pending     `json:"pending"`
 	BestSellOrder *Order        `json:"bestSellOrder"`
 	OriginOrders  []OriginOrder `json:"originOrders"`
@@ -81,9 +81,9 @@ type OriginOrder struct {
 }
 
 type RarityTrait struct {
-	Key    string  `json:"key"`
-	Value  string  `json:"value"`
-	Rarity float64 `json:"rarity"`
+	Key    string `json:"key"`
+	Value  string `json:"value"`
+	Rarity string `json:"rarity"`
 }
 
 type RarityResponse struct {
@@ -91,8 +91,14 @@ type RarityResponse struct {
 	Traits       []RarityTrait `json:"traits"`
 }
 
+type Property struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
 type RarityRequest struct {
-	Collection string `json:"collection"`
+	CollectionId string     `json:"collectionId"`
+	Properties   []Property `json:"properties"`
 }
 
 type OwnershipRequest struct {

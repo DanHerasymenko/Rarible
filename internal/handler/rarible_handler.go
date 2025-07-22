@@ -33,7 +33,9 @@ func (h *RaribleHandler) RegisterRoutes(r *gin.Engine) {
 // @Failure      500  {object}  gin.H
 // @Router       /api/rarible/ownerships/{id} [get]
 func (h *RaribleHandler) GetNFTOwnerships(c *gin.Context) {
+
 	id := c.Param("id")
+
 	result, err := h.service.GetNFTOwnerships(c.Request.Context(), id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -48,17 +50,20 @@ func (h *RaribleHandler) GetNFTOwnerships(c *gin.Context) {
 // @Tags         rarity
 // @Accept       json
 // @Produce      json
-// @Param        body  body      model.RarityRequest  true  "Rarity request"
+// @Param        body  body      model.RarityRequest  true  "Rarity request (collectionId, properties)"
 // @Success      200   {object}  model.RarityResponse
 // @Failure      400   {object}  gin.H
 // @Failure      500   {object}  gin.H
 // @Router       /api/rarible/traits/rarity [post]
 func (h *RaribleHandler) GetTraitRarities(c *gin.Context) {
-	var body map[string]interface{}
+
+	var body model.RarityRequest
+
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid body"})
 		return
 	}
+
 	result, err := h.service.GetTraitRarities(c.Request.Context(), body)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -67,7 +72,7 @@ func (h *RaribleHandler) GetTraitRarities(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-// Для swagger: явно використовуємо типи, щоб swag їх побачив
+// swagger fix: clearly using types
 var (
 	_ = model.OwnershipResponse{}
 	_ = model.RarityRequest{}

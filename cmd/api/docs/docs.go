@@ -62,7 +62,7 @@ const docTemplate = `{
                 "summary": "Get NFT Traits Rarity",
                 "parameters": [
                     {
-                        "description": "Rarity request",
+                        "description": "Rarity request (collectionId, properties)",
                         "name": "body",
                         "in": "body",
                         "required": true,
@@ -254,7 +254,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "lazyValue": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "originOrders": {
                     "type": "array",
@@ -275,10 +275,10 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "tokenId": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "value": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "version": {
                     "type": "integer"
@@ -302,11 +302,28 @@ const docTemplate = `{
                 }
             }
         },
+        "RaribleAPI_internal_model.Property": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
         "RaribleAPI_internal_model.RarityRequest": {
             "type": "object",
             "properties": {
-                "collection": {
+                "collectionId": {
                     "type": "string"
+                },
+                "properties": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/RaribleAPI_internal_model.Property"
+                    }
                 }
             }
         },
