@@ -10,5 +10,6 @@ RUN go build -o rarible-api ./cmd/api/main.go
 FROM alpine:3.19
 WORKDIR /app
 COPY --from=builder /app/rarible-api ./rarible-api
-EXPOSE 8080
+COPY .env .env
+EXPOSE 8081
 CMD ["./rarible-api"]

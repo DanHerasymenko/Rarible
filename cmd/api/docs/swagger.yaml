@@ -1,0 +1,228 @@
+definitions:
+  RaribleAPI_internal_model.Asset:
+    properties:
+      type:
+        $ref: '#/definitions/RaribleAPI_internal_model.AssetType'
+      value:
+        type: number
+    type: object
+  RaribleAPI_internal_model.AssetType:
+    properties:
+      '@type':
+        type: string
+      blockchain:
+        type: string
+      contract:
+        type: string
+    type: object
+  RaribleAPI_internal_model.Order:
+    properties:
+      cancelled:
+        type: boolean
+      createdAt:
+        type: string
+      data:
+        $ref: '#/definitions/RaribleAPI_internal_model.OrderData'
+      dbUpdatedAt:
+        type: string
+      endedAt:
+        type: string
+      feeTakers:
+        items:
+          type: string
+        type: array
+      fill:
+        type: number
+      id:
+        type: string
+      lastUpdatedAt:
+        type: string
+      make:
+        $ref: '#/definitions/RaribleAPI_internal_model.Asset'
+      makePrice:
+        type: number
+      makePriceUsd:
+        type: number
+      makeStock:
+        type: number
+      maker:
+        type: string
+      optionalRoyalties:
+        type: boolean
+      platform:
+        type: string
+      salt:
+        type: string
+      signature:
+        type: string
+      startedAt:
+        type: string
+      status:
+        type: string
+      take:
+        $ref: '#/definitions/RaribleAPI_internal_model.Asset'
+      takePrice:
+        type: number
+      takePriceUsd:
+        type: number
+      taker:
+        type: string
+      version:
+        type: integer
+    type: object
+  RaribleAPI_internal_model.OrderData:
+    properties:
+      '@type':
+        type: string
+      data: {}
+    type: object
+  RaribleAPI_internal_model.OriginOrder:
+    properties:
+      bestBidOrder:
+        $ref: '#/definitions/RaribleAPI_internal_model.Order'
+      bestSellOrder:
+        $ref: '#/definitions/RaribleAPI_internal_model.Order'
+      origin:
+        type: string
+    type: object
+  RaribleAPI_internal_model.OwnershipResponse:
+    properties:
+      bestSellOrder:
+        $ref: '#/definitions/RaribleAPI_internal_model.Order'
+      blockchain:
+        type: string
+      collection:
+        type: string
+      contract:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      itemId:
+        type: string
+      lastUpdatedAt:
+        type: string
+      lazyValue:
+        type: integer
+      originOrders:
+        items:
+          $ref: '#/definitions/RaribleAPI_internal_model.OriginOrder'
+        type: array
+      owner:
+        type: string
+      pending:
+        items:
+          $ref: '#/definitions/RaribleAPI_internal_model.Pending'
+        type: array
+      source:
+        type: string
+      tokenId:
+        type: integer
+      value:
+        type: integer
+      version:
+        type: integer
+    type: object
+  RaribleAPI_internal_model.Pending:
+    properties:
+      '@type':
+        type: string
+      from:
+        type: string
+      royalties:
+        items:
+          $ref: '#/definitions/RaribleAPI_internal_model.Royalty'
+        type: array
+    type: object
+  RaribleAPI_internal_model.RarityRequest:
+    properties:
+      collection:
+        type: string
+    type: object
+  RaribleAPI_internal_model.RarityResponse:
+    properties:
+      continuation:
+        type: string
+      traits:
+        items:
+          $ref: '#/definitions/RaribleAPI_internal_model.RarityTrait'
+        type: array
+    type: object
+  RaribleAPI_internal_model.RarityTrait:
+    properties:
+      key:
+        type: string
+      rarity:
+        type: number
+      value:
+        type: string
+    type: object
+  RaribleAPI_internal_model.Royalty:
+    properties:
+      account:
+        type: string
+      value:
+        type: integer
+    type: object
+  gin.H:
+    additionalProperties: {}
+    type: object
+info:
+  contact: {}
+  description: Rarible client, and Service to interact with the Rarible API.
+  title: Rarible
+  version: "1.0"
+paths:
+  /api/rarible/ownerships/{id}:
+    get:
+      description: Returns NFT ownership details by ownership ID
+      parameters:
+      - description: Ownership ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/RaribleAPI_internal_model.OwnershipResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get NFT Ownership by ID
+      tags:
+      - ownership
+  /api/rarible/traits/rarity:
+    post:
+      consumes:
+      - application/json
+      description: Returns rarity for NFT traits (recommended)
+      parameters:
+      - description: Rarity request
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/RaribleAPI_internal_model.RarityRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/RaribleAPI_internal_model.RarityResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get NFT Traits Rarity
+      tags:
+      - rarity
+swagger: "2.0"

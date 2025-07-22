@@ -21,7 +21,6 @@ func ginGetLoggerAttr(ctx *gin.Context) []slog.Attr {
 		return nil
 	}
 	return attrs
-
 }
 
 // ginMergeAttr merges existing Gin context attributes with new ones

@@ -28,7 +28,7 @@ func Logger() gin.HandlerFunc {
 
 		logger.GinSetLoggerAttr(ctx, slog.Int64("duration_ms", duration.Milliseconds()))
 
-		// If there were any errors during request handling, attach the last one
+		// If there were any errors during request handling -> attaching the last one
 		if len(ctx.Errors) > 0 {
 			for _, err := range ctx.Errors {
 				logger.GinSetLoggerAttr(ctx, slog.String("resp_message", err.Error()))
